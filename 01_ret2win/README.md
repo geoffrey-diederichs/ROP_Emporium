@@ -2,7 +2,7 @@
 
 Let's test the program :
 
-```console
+```bash
 $ ./ret2win               
 ret2win by ROP Emporium
 x86_64
