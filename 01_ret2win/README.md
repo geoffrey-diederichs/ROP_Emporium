@@ -155,7 +155,7 @@ p.send(payload)
 p.interactive()
 ```
 
-```bash
+```console
 ┌──(coucou㉿coucou)-[~/Documents/ROP_Emporium/01_ret2win]
 └─$ python3 exploit.py
 [*] '/home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win'
@@ -194,7 +194,7 @@ We're reaching the ret2win() function, but the program isn't giving us the flag.
 
 The program is running into a sigsegv while trying to execute movaps. This is probably because of a misalignment of the stack. We need to add a ret command before executing ret2win(). Using [this final script](./exploit.py), we get :
 
-```bash
+```console
 $ python3 exploit.py
 [*] '/home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win'
     Arch:     amd64-64-little
