@@ -156,8 +156,7 @@ p.interactive()
 ```
 
 ```console
-┌──(coucou㉿coucou)-[~/Documents/ROP_Emporium/01_ret2win]
-└─$ python3 exploit.py
+$ python3 exploit.py
 [*] '/home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win'
     Arch:     amd64-64-little
     RELRO:    Partial RELRO
