@@ -127,16 +127,6 @@ $cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-We can see that the rbp is stored right after the variable. All we need now is to find out the address we want to return to :
-
-```gdb
-gef➤  i func ret2win
-All functions matching regular expression "ret2win":
-
-Non-debugging symbols:
-0x0000000000400756  ret2win
-```
-
-Let's write the exploit.
+We can see that the rbp is stored right after the variable.
 
 # Exploit
