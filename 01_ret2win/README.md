@@ -217,3 +217,5 @@ ROPE{a_placeholder_32byte_flag!}
 $ 
 [*] Process './ret2win' stopped with exit code 0 (pid 13293)
 ```
+
+The program returned the flag, our exploit is working !
