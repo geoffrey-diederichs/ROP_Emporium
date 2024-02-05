@@ -189,3 +189,5 @@ Contriving a reason to ask user for data...
 > $ 
 [*] Stopped process '/home/coucou/Documents/ROP_Emporium/02_split/split' (pid 27166)
 ```
+
+The program returned the flag, our exploit is working !
