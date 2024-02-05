@@ -1,3 +1,3 @@
 # ROP Emporium
 
-Write-ups de [ROP Emporium](https://ropemporium.com/index.html).
+Write-ups of [ROP Emporium](https://ropemporium.com/index.html).
