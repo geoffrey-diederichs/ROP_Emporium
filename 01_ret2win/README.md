@@ -127,7 +127,7 @@ $cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-We can see that the rbp is stored right after the variable.
+We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes, 8 bytes to overwrite the rbp, and finally the address of ret2win.
 
 # Exploit
 
