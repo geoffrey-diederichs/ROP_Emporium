@@ -2,7 +2,7 @@
 
 Let's test the program :
 
-```
+```console
 $ ./split                 
 split by ROP Emporium
 x86_64
