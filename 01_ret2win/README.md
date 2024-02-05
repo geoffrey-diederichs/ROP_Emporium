@@ -2,7 +2,7 @@
 
 Let's test the program :
 
-```zsh
+```sh
 $ ./ret2win               
 ret2win by ROP Emporium
 x86_64
