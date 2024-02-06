@@ -136,7 +136,7 @@ gef➤  x/3i 0x400720
 
 # Exploit
 
-Using [this script](./exploit.py), we get the flag :
+Using [this script](./exploit.py) to write over memory until we reach the return address, and set the register with the required parameters before calling the functions one after the other, we get the flag :
 
 ```console
 $ python3 exploit.py
