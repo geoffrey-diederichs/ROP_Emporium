@@ -1,3 +1,3 @@
 # ROP Emporium
 
-Write-ups of [ROP Emporium](https://ropemporium.com/index.html).
+Write-ups of the [ROP Emporium](https://ropemporium.com/index.html) challenges.
