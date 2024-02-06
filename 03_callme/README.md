@@ -54,7 +54,7 @@ void usefulFunction(void)
 
 In the description of this challenge, we're told we need to call the function callme_one(), callme_two() and callme_three() in that order and with the arguments 0xdeadbeefdeadbeef, 0xcafebabecafebabe, 0xd00df00dd00df00d.
 
-The read function in pwnme() expects 512 bytes even the local_28 variable is 32 bytes long. Let's exploit this buffer overflow to redirect program execution.
+The read function in pwnme() expects 512 bytes even tho the local_28 variable is 32 bytes long. Let's exploit this buffer overflow to redirect program execution.
 
 # Dynamic analysis
 
