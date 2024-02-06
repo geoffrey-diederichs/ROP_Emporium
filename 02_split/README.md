@@ -105,7 +105,7 @@ gef➤  x/s 6295648
 0x601060 <usefulString>:	"/bin/cat flag.txt"
 ```
 
-Finally to run the system call with another argument we need to modify the rdi, let's find a gadget to do so :
+Finally to run the system call with another argument we need to modify the rdi with a pointer to the string we just found, let's find a gadget to do so :
 
 ```console
 $ ROPgadget --binary split | grep rdi             
