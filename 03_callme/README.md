@@ -115,7 +115,7 @@ $ ROPgadget --binary callme | grep rdi
 
 We found `0x000000000040093c : pop rdi ; pop rsi ; pop rdx ; ret` which does exactly what we want.
   
-Our last remaining issue being that we need to call the functions callme_one(), callme_two() and callme_three() in that order. But if we look at the usefulFonction() not only does it not use a `ret` instruction (that we need to redirect program execution), but it also modifies the register before calling those functions in the wrong order.  
+Our last remaining issue being that we need to call the functions callme_one(), callme_two() and callme_three() in that order. But if we take a look at the usefulFonction() not only does it not use a `ret` instruction (that we need to redirect program execution), but it also modifies the register before calling those functions in the wrong order.  
   
 We'll need to bypass this by directly calling the PLT instructions resolving the address to those functions. We can find those pointers in the disassembled code of the usefulFunction() above :
 
