@@ -128,10 +128,10 @@ gef➤  x/3i 0x400740
    0x400740 <callme_two@plt>:	jmp    QWORD PTR [rip+0x20090a]        # 0x601050 <callme_two@got.plt>
    0x400746 <callme_two@plt+6>:	push   0x7
    0x40074b <callme_two@plt+11>:	jmp    0x4006c0
-gef➤  x/3i 0x400750
-   0x400750 <exit@plt>:	jmp    QWORD PTR [rip+0x200902]        # 0x601058 <exit@got.plt>
-   0x400756 <exit@plt+6>:	push   0x8
-   0x40075b <exit@plt+11>:	jmp    0x4006c0
+gef➤  x/3i 0x400720
+   0x400720 <callme_one@plt>:	jmp    QWORD PTR [rip+0x20091a]        # 0x601040 <callme_one@got.plt>
+   0x400726 <callme_one@plt+6>:	push   0x5
+   0x40072b <callme_one@plt+11>:	jmp    0x4006c0
 ```
 
 # Exploit
