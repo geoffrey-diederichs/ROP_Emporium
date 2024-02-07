@@ -67,7 +67,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 ```
 
 ```gdb
-────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
 0x00007fffffffda10│+0x0000: 0x4141414141414141	 ← $rsp, $rsi
 0x00007fffffffda18│+0x0008: 0x4141414141414141
 0x00007fffffffda20│+0x0010: 0x4141414141414141
@@ -76,6 +76,16 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 0x00007fffffffda38│+0x0028: 0x0000000000400887  →  <main+0040> mov edi, 0x4009e7
 0x00007fffffffda40│+0x0030: 0x0000000000000001
 0x00007fffffffda48│+0x0038: 0x00007ffff7a456ca  →  <__libc_start_call_main+007a> mov edi, eax
+──────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
+     0x4008d8 <pwnme+0040>     mov    rsi, rax
+     0x4008db <pwnme+0043>     mov    edi, 0x0
+     0x4008e0 <pwnme+0048>     call   0x400710 <read@plt>
+ →   0x4008e5 <pwnme+004d>     mov    edi, 0x400a16
+     0x4008ea <pwnme+0052>     call   0x4006d0 <puts@plt>
+     0x4008ef <pwnme+0057>     nop    
+     0x4008f0 <pwnme+0058>     leave  
+     0x4008f1 <pwnme+0059>     ret    
+     0x4008f2 <usefulFunction+0000> push   rbp
 ```
 
 The rbp is stored right after our input on the stack. Now let's take a look at the usefulFunction() we'll need to call :
@@ -134,9 +144,11 @@ gef➤  x/3i 0x400720
    0x40072b <callme_one@plt+11>:	jmp    0x4006c0
 ```
 
+We got all we need, our payload will be : an offset to reach the return address, the gadgets to set the register with the required parameters followed by the function calls in the correct order.
+
 # Exploit
 
-Using [this script](./exploit.py) to write over memory until we reach the return address, and set the register with the required parameters before calling the functions one after the other, we get the flag :
+Using [this script](./exploit.py) we get the flag :
 
 ```console
 $ python3 exploit.py
