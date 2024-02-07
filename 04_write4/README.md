@@ -134,7 +134,7 @@ nth vaddr      bind   type   lib name
 4   0x00400510 GLOBAL FUNC       print_file
 ```
 
-Now we need to find a way to write the string "flag.txt" somewhere in memory. Let's take a look at the section of our binary :
+Now we need to find a way to write the string "flag.txt" somewhere in memory. Let's take a look at the sections of our binary :
 
 ```console
 $ rabin2 -S write4                                               
