@@ -70,7 +70,7 @@ void print_file(char *param_1)
 
 The read() function inside pwnme() expects 512 bytes even tho the local_28 variable is 32 bytes long. This is vulnerable to a buffer overflow.  
   
-We need to exploit this vulnerability to redirect the program towards the print_file() function with "flag.txt" as argument.
+We need to exploit this vulnerability to redirect the program towards the print_file() function with `flag.txt` as argument.
 
 # Dynamic analysis
 
@@ -134,7 +134,7 @@ nth vaddr      bind   type   lib name
 4   0x00400510 GLOBAL FUNC       print_file
 ```
 
-Now we need to find a way to write the string "flag.txt" somewhere in memory. Let's take a look at the sections of our binary :
+Now we need to find a way to write the string `flag.txt` somewhere in memory. Let's take a look at the sections of our binary :
 
 ```console
 $ rabin2 -S write4                                               
@@ -197,7 +197,7 @@ $ ROPgadget --binary write4 | grep 'r14'
 
 This gadget does exactly that : `0x0000000000400690 : pop r14 ; pop r15 ; ret`.  
   
-Lastly we need to modify rdi to point towards our string "flag.txt", since rdi stores the pointer towards the first argument of a called function. Let's find a gadget to do so :
+Lastly we need to modify rdi to point towards our string `flag.txt`, since rdi stores the pointer towards the first argument of a called function. Let's find a gadget to do so :
 
 ```console
 $ ROPgadget --binary write4 | grep 'rdi'
