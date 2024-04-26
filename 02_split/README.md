@@ -50,9 +50,9 @@ void usefulFunction(void)
 
 In the description of the challenge, we're told there is a `/bin/cat flag.txt` string in the binary.  
   
-The read() function in pwnme() is expecting 96 bytes even tho the local_28 variable is 32 bytes long. This i vulnerable to a buffer overflow.  
+The `read()` function in `pwnme()` is expecting 96 bytes even tho the `local_28` variable is 32 bytes long. This is vulnerable to a buffer overflow.  
   
-Let's exploit this to run the system call in usefulFunction() with the `/bin/cat flag.txt` string as parameter.
+Let's exploit this to run the system call in `usefulFunction()` with the `/bin/cat flag.txt` string as parameter.
 
 ## Dynamic analysis
 
