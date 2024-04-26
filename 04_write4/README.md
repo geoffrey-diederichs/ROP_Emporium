@@ -102,7 +102,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
    0x7ffff7c00943 <print_file+0000> push   rbp
 ```
 
-The rbp is stored right after our input on the stack. Now let's find a pointer to the PLT address of the function `print_file()` we need to call :
+The rbp is stored right after our input on the stack. Now let's find a pointer to the PLT address of the `print_file()` function we need to call :
 
 ```gdb
 gef➤  disas usefulFunction
