@@ -14,7 +14,7 @@ Thank you!
 Exiting
 ```
 
-# Static analysis
+## Static analysis
 
 Using ghidra we can find those functions :
 
@@ -54,7 +54,7 @@ The read() function in pwnme() is expecting 96 bytes even tho the local_28 varia
   
 Let's exploit this to run the system call in usefulFunction() with the `/bin/cat flag.txt` string as parameter.
 
-# Dynamic analysis
+## Dynamic analysis
 
 Using gdb, we'll find out how many bytes we need to send to modify the return address.  
 
@@ -132,7 +132,7 @@ gef➤  x/2wi 0x00000000004007c3
 
 We got all we need, our payload will be : an offset to reach the return address, the gadget to modify rdi followed by the pointer to the string to be put inside rdi, and finally the pointer to the system call.
 
-# Exploit
+## Exploit
 
 We'll use [this script](./exploit.py) to send our payload :
 
