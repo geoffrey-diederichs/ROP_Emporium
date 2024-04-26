@@ -4,17 +4,17 @@ Write-ups of the [ROP Emporium](https://ropemporium.com/index.html) challenges t
 
 ## [ret2win](./01_ret2win)
 
-- Executing a function
-- Realigning the stack
+- Executing a function.
+- Realigning the stack.
 
 ## [split](./02_split)
 
-- Modifying arguments to a function call
+- Modifying arguments to a function call.
 
 ## [callme](./03_callme)
 
-- Calling a function by it's PLT entry
+- Calling a function by it's PLT entry.
 
 ## [write4](./04_write4)
 
-- Writing over memory
+- Writing over memory.
