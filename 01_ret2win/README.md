@@ -58,9 +58,9 @@ void ret2win(void)
 }
 ```
 
-The read() function in pwnme() expects 56 bytes even tho the local_28 variable is 32 bytes long. This is vulnerable to a buffer overflow.  
+The `read()` function in `pwnme()` expects 56 bytes even tho the `local_28` variable is 32 bytes long. This is vulnerable to a buffer overflow.  
   
-Let's exploit this to redirect the program towards ret2win().
+Let's exploit this to redirect the program towards `ret2win()`.
 
 # Dynamic Analysis
 
