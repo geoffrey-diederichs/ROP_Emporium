@@ -66,7 +66,7 @@ Let's exploit this to redirect the program towards `ret2win()`.
 
 Using gdb, we'll find out how many bytes we need to send to modify the return address.  
 
-Let's take a look at the stack right after we've send 32 bytes :
+Let's take a look at the stack right after we've send 32 bytes (the size of `local_28`) :
 
 ```gdb
 gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
@@ -93,7 +93,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
      0x400756 <ret2win+0000>   push   rbp
 ```
 
-We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes, 8 bytes to overwrite the rbp, and finally the address of ret2win.
+We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes, 8 bytes to overwrite the rbp, and finally a pointer towards `ret2win()`.
 
 # Exploit
 
