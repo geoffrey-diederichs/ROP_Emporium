@@ -1,6 +1,6 @@
 # ROP Emporium
 
-Write-ups of the [ROP Emporium](https://ropemporium.com/index.html) challenges teaching about how to exploit buffer overflows.
+Write-ups of the [ROP Emporium](https://ropemporium.com) challenges teaching about how to exploit buffer overflows.
 
 ## [ret2win](./01_ret2win)
 
