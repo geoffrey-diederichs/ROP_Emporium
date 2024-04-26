@@ -2,6 +2,8 @@
 
 Write-ups of the [ROP Emporium](https://ropemporium.com) challenges teaching about how to exploit buffer overflows.
 
+All of those challenges have been solved on a `x86_64` system.
+
 ## [ret2win](./01_ret2win)
 
 - Executing a function.
