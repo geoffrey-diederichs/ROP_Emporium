@@ -13,7 +13,7 @@ Go ahead and give me the input already!
 Thank you!
 ```
 
-# Static Analysis
+## Static Analysis
 
 Using Ghidra we can find those functions inside write4 :
 
@@ -72,7 +72,7 @@ The read() function inside pwnme() expects 512 bytes even tho the local_28 varia
   
 We need to exploit this vulnerability to redirect the program towards the print_file() function with `flag.txt` as argument.
 
-# Dynamic analysis
+## Dynamic analysis
 
 Let's use gdb to find out what offset we need to access the return pointer :
 
@@ -206,7 +206,7 @@ $ ROPgadget --binary write4 | grep 'rdi'
 
 We've got all we need. Our payload will be : some offset to reach the return pointer, the gadgets to modify r14 and r15, the gadgets to modify rdi, and finally a pointer towards the PLT entry for the print_file() function.
 
-# Exploit
+## Exploit
 
 Using [this script](./exploit.py) we get the flag :
 
