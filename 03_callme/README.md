@@ -52,9 +52,9 @@ void usefulFunction(void)
 }
 ```
 
-In the description of this challenge, we're told we need to call the function callme_one(), callme_two() and callme_three() in that order and with the arguments 0xdeadbeefdeadbeef, 0xcafebabecafebabe, 0xd00df00dd00df00d.
+In the description of this challenge, we're told we need to call the function `callme_one()`, `callme_two()` and `callme_three()` in that order and with the arguments `0xdeadbeefdeadbeef`, `0xcafebabecafebabe`, `0xd00df00dd00df00d`.
 
-The read function in pwnme() expects 512 bytes even tho the local_28 variable is 32 bytes long. Let's exploit this buffer overflow to redirect program execution.
+The `read()` function in `pwnme()` expects 512 bytes even tho the `local_28` variable is 32 bytes long. Let's exploit this buffer overflow to redirect program execution.
 
 # Dynamic analysis
 
@@ -88,7 +88,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
      0x4008f2 <usefulFunction+0000> push   rbp
 ```
 
-The rbp is stored right after our input on the stack. Now let's take a look at the usefulFunction() we'll need to call :
+The rbp is stored right after our input on the stack. Now let's take a look at the `usefulFunction()` we'll need to call :
 
 ```gdb
 gef➤  disas usefulFunction 
@@ -125,9 +125,9 @@ $ ROPgadget --binary callme | grep rdi
 
 We found `0x000000000040093c : pop rdi ; pop rsi ; pop rdx ; ret` which does exactly what we want.
   
-Our last remaining issue being that we need to call the functions callme_one(), callme_two() and callme_three() in that order. But if we take a look at the usefulFonction() not only does it not use a `ret` instruction (that we need to redirect program execution), but it also modifies the register before calling those functions in the wrong order.  
+Our last remaining issue being that we need to call the functions `callme_one()`, `callme_two()` and `callme_three()` in that order. But if we take a look at the `usefulFonction()` not only does it not use a `ret` instruction (that we need to redirect program execution), but it also modifies the register before calling those functions in the wrong order.  
   
-We'll need to bypass this by directly calling the PLT instructions resolving the address to those functions. We can find those pointers in the disassembled code of the usefulFunction() above :
+We'll need to bypass this by directly calling the PLT instructions resolving the address to those functions. We can find these pointers in the disassembled code of the usefulFunction() above :
 
 ```gdb
 gef➤  x/3i 0x4006f0
@@ -144,7 +144,7 @@ gef➤  x/3i 0x400720
    0x40072b <callme_one@plt+11>:	jmp    0x4006c0
 ```
 
-We got all we need, our payload will be : an offset to reach the return address, the gadgets to set the register with the required parameters followed by the function calls in the correct order.
+We've got all we need, our payload will be : an offset to reach the return address, the gadgets to set the register with the required parameters followed by the function calls in the correct order.
 
 # Exploit
 
