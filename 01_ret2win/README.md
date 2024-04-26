@@ -17,7 +17,7 @@ Thank you!
 Exiting
 ```
 
-# Static analysis
+## Static analysis
 
 Using ghidra we can find those functions :
 
@@ -62,7 +62,7 @@ The `read()` function in `pwnme()` expects 56 bytes even tho the `local_28` vari
   
 Let's exploit this to redirect the program towards `ret2win()`.
 
-# Dynamic Analysis
+## Dynamic Analysis
 
 Using gdb, we'll find out how many bytes we need to send to modify the return address.  
 
@@ -95,7 +95,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 
 We can see that the rbp is stored right after the variable : our payload will have an offset of 32 bytes, 8 bytes to overwrite the rbp, and finally a pointer towards `ret2win()`.
 
-# Exploit
+## Exploit
 
 Let's send our payload using pwntools :
 
