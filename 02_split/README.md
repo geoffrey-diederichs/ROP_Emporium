@@ -130,7 +130,7 @@ gef➤  x/2wi 0x00000000004007c3
    0x4007c4 <__libc_csu_init+100>:	ret
 ```
 
-We got all we need, our payload will be : an offset to reach the return address, the gadget to modify rdi followed by the pointer to the string to be put inside rdi, and finally the pointer to the system call.
+We've got all we need, our payload will be : an offset to reach the return address, the gadget to modify rdi followed by the pointer to the string to be put inside rdi, and finally the pointer to the system call.
 
 ## Exploit
 
