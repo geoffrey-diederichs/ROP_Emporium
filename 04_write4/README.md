@@ -68,9 +68,9 @@ void print_file(char *param_1)
 }
 ```
 
-The read() function inside pwnme() expects 512 bytes even tho the local_28 variable is 32 bytes long. This is vulnerable to a buffer overflow.  
+The `read()` function inside `pwnme()` expects 512 bytes even tho the `local_28` variable is 32 bytes long. This is vulnerable to a buffer overflow.  
   
-We need to exploit this vulnerability to redirect the program towards the print_file() function with `flag.txt` as argument.
+We need to exploit this vulnerability to redirect the program towards the `print_file()` function with `flag.txt` as argument.
 
 ## Dynamic analysis
 
