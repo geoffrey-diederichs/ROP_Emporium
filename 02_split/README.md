@@ -48,7 +48,7 @@ void usefulFunction(void)
 }
 ```
 
-In the description of the challenge, we're told there is a "/bin/cat flag.txt" string in the binary.  
+In the description of the challenge, we're told there is a `/bin/cat flag.txt` string in the binary.  
   
 The read() function in pwnme() is expecting 96 bytes even tho the local_28 variable is 32 bytes long. This i vulnerable to a buffer overflow.  
   
