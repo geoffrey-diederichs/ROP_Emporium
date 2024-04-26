@@ -17,7 +17,7 @@ Exiting
 
 ## Static Analysis
 
-Using ghidra we can find those functions :
+Using Ghidra we can find those functions :
 
 ```C
 undefined8 main(void)
