@@ -15,7 +15,7 @@ Thank you!
 Exiting
 ```
 
-# Static Analysis
+## Static Analysis
 
 Using ghidra we can find those functions :
 
@@ -56,17 +56,17 @@ In the description of this challenge, we're told we need to call the function `c
 
 The `read()` function in `pwnme()` expects 512 bytes even tho the `local_28` variable is 32 bytes long. Let's exploit this buffer overflow to redirect program execution.
 
-# Dynamic analysis
+## Dynamic analysis
 
-Using gdb, we'll find out how many bytes we need to send to modify the return address.  
+Using GDB, we'll find out how many bytes we need to send to modify the return address.  
   
 Let's take a look at the stack after we've send 32 bytes :
 
-```gdb
+```GDB
 gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 ```
 
-```gdb
+```GDB
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
 0x00007fffffffda10│+0x0000: 0x4141414141414141	 ← $rsp, $rsi
 0x00007fffffffda18│+0x0008: 0x4141414141414141
@@ -90,7 +90,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 
 The rbp is stored right after our input on the stack. Now let's take a look at the `usefulFunction()` we'll need to call :
 
-```gdb
+```GDB
 gef➤  disas usefulFunction 
 Dump of assembler code for function usefulFunction:
    0x00000000004008f2 <+0>:	push   rbp
@@ -129,7 +129,7 @@ Our last remaining issue being that we need to call the functions `callme_one()`
   
 We'll need to bypass this by directly calling the PLT instructions resolving the address to those functions. We can find these pointers in the disassembled code of the usefulFunction() above :
 
-```gdb
+```GDB
 gef➤  x/3i 0x4006f0
    0x4006f0 <callme_three@plt>:	jmp    QWORD PTR [rip+0x200932]        # 0x601028 <callme_three@got.plt>
    0x4006f6 <callme_three@plt+6>:	push   0x2
@@ -146,7 +146,7 @@ gef➤  x/3i 0x400720
 
 We've got all we need, our payload will be : an offset to reach the return address, the gadgets to set the register with the required parameters followed by the function calls in the correct order.
 
-# Exploit
+## Exploit
 
 Using [this script](./exploit.py) we get the flag :
 
