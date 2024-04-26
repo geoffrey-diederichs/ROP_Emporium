@@ -136,7 +136,7 @@ Thank you!
 Well done! Here's your flag:
 ```
 
-We're reaching the ret2win() function, but the program isn't giving us the flag. Let's look at what's going on with gdb :
+We're reaching the `ret2win()` function, but the program isn't giving us the flag. Let's take a look with gdb :
 
 ```gdb
 ───────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
