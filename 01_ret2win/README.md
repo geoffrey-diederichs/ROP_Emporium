@@ -157,7 +157,7 @@ We're reaching the `ret2win()` function, but the program isn't giving us the fla
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-The program is running into a `sigsegv` while trying to execute a `movaps` instruction. This is probably because of a misalignment of the stack. We need to add a `ret` instratuction to realign the stack before executing `ret2win()`. Using [this final script](./exploit.py), we get :
+The program is running into a `sigsegv` while trying to execute a `movaps` instruction. This is probably because of a misalignment of the stack. We need to add a `ret` instruction to realign the stack before executing `ret2win()`. Using [this final script](./exploit.py), we get :
 
 ```console
 $ python3 exploit.py
