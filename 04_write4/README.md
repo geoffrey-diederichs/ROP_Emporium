@@ -102,7 +102,7 @@ gef➤  r <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"\x41"*32)')
    0x7ffff7c00943 <print_file+0000> push   rbp
 ```
 
-The rbp is stored right after our input on the stack. Now let's find a pointer to the PLT address of the function print_file() we need to call :
+The rbp is stored right after our input on the stack. Now let's find a pointer to the PLT address of the function `print_file()` we need to call :
 
 ```gdb
 gef➤  disas usefulFunction
@@ -204,7 +204,7 @@ $ ROPgadget --binary write4 | grep 'rdi'
 0x0000000000400693 : pop rdi ; ret
 ```
 
-We've got all we need. Our payload will be : some offset to reach the return pointer, the gadgets to modify r14 and r15, the gadgets to modify rdi, and finally a pointer towards the PLT entry for the print_file() function.
+We've got all we need. Our payload will be : some offset to reach the return pointer, the gadgets to modify r14 and r15, the gadgets to modify rdi, and finally a pointer towards the PLT entry for the `print_file()` function.
 
 ## Exploit
 
