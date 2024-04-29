@@ -1,6 +1,6 @@
 # ROP Emporium
 
-Write-ups of the [ROP Emporium](https://ropemporium.com) challenges teaching about how to exploit buffer overflows.  
+Write-ups of the [ROP Emporium](https://ropemporium.com) challenges teaching how to exploit buffer overflows using return-oriented programming.  
 All of these challenges have been solved in the `x86_64` version.
 
 ## [ret2win](./01_ret2win)
