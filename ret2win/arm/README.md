@@ -1,6 +1,6 @@
 # [ret2win](https://ropemporium.com/challenge/ret2win.html)
 
-[Dockefile](../../Dockerfile) of pwn setup for different architectures.
+[Dockerfile](../../Dockerfile) of pwn setup for different architectures.
 
 Usefull links to set up for arm :
 
@@ -20,7 +20,7 @@ GEF for linux ready, type `gef' to start, `gef config' to configure
 gef➤  gef-remote --qemu-user --qemu-binary ./ret2win_armv5 localhost 1234
 ```
 
-[solve.py](./solve.py) :
+[Solve](./solve.py) :
 
 ```console
 $ python3 solve.py 

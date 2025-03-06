@@ -1,6 +1,6 @@
 # [ret2win](https://ropemporium.com/challenge/ret2win.html)
 
-[Dockefile](../../Dockerfile) of pwn setup for different architectures.
+[Dockerfile](../../Dockerfile) of pwn setup for different architectures.
 
 Setting up same way as for arm :
 
@@ -17,7 +17,7 @@ The target architecture is set to "mips".
 gef➤  gef-remote --qemu-user --qemu-binary ./ret2win_mipsel localhost 1234
 ```
 
-[solve.py](./solve.py) :
+[Solve](./solve.py) :
 
 ```console
 python3 solve.py 
