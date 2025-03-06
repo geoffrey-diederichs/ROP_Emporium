@@ -1,3 +1,5 @@
 # [ROP Emporium](https://ropemporium.com/)
 
-ROP Emporium writeups.
+ROP Emporium solves.
+
+[Docker image](./Dockerfile) used to work with arm and mips.
