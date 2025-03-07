@@ -1,6 +1,8 @@
 # [ROP Emporium](https://ropemporium.com/)
 
-Solves of [ROP Emporium](https://ropemporium.com/) challenges teaching about ROP chains (Return Oriented Programming) to exploit buffer overflows. Solves for every available architectures : x86_64, x86, arm, mips.
+Solves for every available architectures : x86_64, x86, arm, mips.
+
+[ROP Emporium](https://ropemporium.com/) challenges teach about ROP chains (Return Oriented Programming) to exploit buffer overflows.
 
 [Docker image](./Dockerfile) used to work with arm and mips.
 
@@ -14,4 +16,8 @@ Setting arguments for a function's call.
 
 ## [callme](./03_callme/)
 
-Calling function by their PLT's entries.
+Calling functions by their PLT's entries.
+
+## [write4](./04_write4/)
+
+Writing over memory.
