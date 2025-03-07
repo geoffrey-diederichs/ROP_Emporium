@@ -3,8 +3,8 @@
 [Solve](./solve.py) :
 
 ```console
-$ python3 solve.py 
-[+] Starting local process './callme': pid 96940
-[*] Process './callme' stopped with exit code 0 (pid 96940)
+python3 solve.py 
+[+] Starting local process './callme_armv5': pid 116
 Flag : b'ROPE{a_placeholder_32byte_flag!}\n'
+[*] Stopped process './callme_armv5' (pid 116)
 ```
