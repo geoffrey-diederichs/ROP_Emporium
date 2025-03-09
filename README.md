@@ -21,3 +21,7 @@ Calling functions by their PLT's entries.
 ## [write4](./04_write4/)
 
 Writing over memory.
+
+## [badchars](./05_badchars/)
+
+Bypassing limitations on bytes to be used.
