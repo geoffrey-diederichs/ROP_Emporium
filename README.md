@@ -2,7 +2,7 @@
 
 Solves for every available architectures : x86_64, x86, arm, mips.
 
-[ROP Emporium](https://ropemporium.com/) challenges teach about ROP chains (Return Oriented Programming) to exploit buffer overflows.
+[ROP Emporium's](https://ropemporium.com/) challenges teach about ROP chains (Return Oriented Programming) to exploit buffer overflows.
 
 [Docker image](./Dockerfile) used to work with arm and mips.
 
