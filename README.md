@@ -25,3 +25,7 @@ Writing over memory.
 ## [badchars](./05_badchars/)
 
 Bypassing limitations on bytes to be used.
+
+## [fluff](./06_fluff/)
+
+Finding and using uncommon gadgets.
