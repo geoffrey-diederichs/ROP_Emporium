@@ -1,6 +1,6 @@
 # [fluff](https://ropemporium.com/challenge/fluff.html)
 
-`--thumb` to find the appropriate gadgets.
+`--thumb` to find the gadgets.
 
 [Solve](./solve.py) :
 

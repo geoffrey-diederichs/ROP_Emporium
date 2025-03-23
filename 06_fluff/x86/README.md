@@ -1,5 +1,7 @@
 # [fluff](https://ropemporium.com/challenge/fluff.html)
 
+`--depth 100` to find the gadgets.
+
 [Solve](./solve.py) :
 
 ```console
