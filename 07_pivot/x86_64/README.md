@@ -1,5 +1,7 @@
 # [pivot](https://ropemporium.com/challenge/pivot.html)
 
+For this one, I chose to load the got entry in a register, modify and execute it inside the same ropchain.
+
 [Solve](./solve.py) :
 
 ```console

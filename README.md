@@ -32,4 +32,4 @@ Finding and using uncommon gadgets.
 
 ## [pivot](./07_pivot)
 
-Moving the stack to another location in memory.
+Moving the stack to another location in memory to do a ret2lib.
