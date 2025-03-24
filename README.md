@@ -12,7 +12,7 @@ Executing a function.
 
 ## [split](./02_split/)
 
-Setting arguments for a function's call.
+Setting arguments to a function's call.
 
 ## [callme](./03_callme/)
 
@@ -29,3 +29,7 @@ Bypassing limitations on bytes to be used.
 ## [fluff](./06_fluff/)
 
 Finding and using uncommon gadgets.
+
+## [pivot](./07_pivot)
+
+Moving the stack to another location in memory.
